@@ -25,5 +25,8 @@ public class SkillsServiceImpl {
     public List<Skills>getAllSkillsByUserId(Long id){
         return this.skillsRepository.findByUser_Id(id);
     }
+    public Skills saveSkills (Skills skill) {
+        return this.skillsRepository.save(skill);
+    }
 
 }

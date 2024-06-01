@@ -1,9 +1,6 @@
 package com.team.controllers;
 
-import com.team.entity.ERole;
-import com.team.entity.Role;
-import com.team.entity.User;
-import com.team.entity.UserInformation;
+import com.team.entity.*;
 import com.team.repository.RoleRepository;
 import com.team.repository.UserRepository;
 import com.team.services.SkillsServiceImpl;
@@ -68,7 +65,7 @@ public class UserController {
      * @return
      */
     @PostMapping(value = "/leaveTeam/username")
-    public ResponseEntity<?> leaveCourse(@Param(value = "username") String username, @Param(value = "teamId") Long teamId){
+    public ResponseEntity<?> leaveTeam(@Param(value = "username") String username, @Param(value = "teamId") Long teamId){
         return userService.leaveTeams(username, teamId);
     }
 
@@ -112,6 +109,11 @@ public class UserController {
     @GetMapping(value = "/getSkills/{userId}")
     public ResponseEntity<?> getSkillsByUserId(@PathVariable Long userId){
         return new ResponseEntity<>(skillsService.getAllSkillsByUserId(userId), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/saveSkills")
+    public ResponseEntity<?> saveSkills(@RequestBody Skills skills){
+        return new ResponseEntity<>(skillsService.saveSkills(skills), HttpStatus.OK);
     }
     /**
      * @param username
