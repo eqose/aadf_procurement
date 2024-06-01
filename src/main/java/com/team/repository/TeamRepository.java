@@ -13,4 +13,7 @@ public interface TeamRepository extends JpaRepository<Team, Long>, JpaSpecificat
 
     @Query(value = "SELECT t FROM Team t join TeamMembers m where m.user.id = ?")
     List<Team> getTeamsByUserId (Long id);
+
+    List<Team> getTeamsByTheme_Id (Long themeId);
+
 }

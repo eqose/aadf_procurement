@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TeamServiceImpl {
@@ -18,17 +19,20 @@ public class TeamServiceImpl {
         this.teamRepository = teamRepository;
     }
 
-    List<Team> getAllTeams(){
+    public List<Team> getAllTeams(){
         return this.teamRepository.findAll();
     }
 
-    Team saveTeam (Team team){
+    public Team saveTeam (Team team){
         return this.teamRepository.save(team);
     }
-    Team getTeamById (Long id){
+    public Team getTeamById (Long id){
         return this.teamRepository.findById(id).get();
     }
-    List<Team> getTeamsByUserId (Long userId){
+    public List<Team> getTeamsByUserId (Long userId){
         return this.teamRepository.getTeamsByUserId(userId);
+    }
+    public List<Team> getTeamsByThemeId (Long themeId){
+        return this.teamRepository.getTeamsByTheme_Id(themeId);
     }
 }

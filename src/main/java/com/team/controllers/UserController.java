@@ -97,7 +97,7 @@ public class UserController {
     }
 
 
-    @GetMapping(value = "/saveUserInfo")
+    @PostMapping(value = "/saveUserInfo")
     public ResponseEntity<?> saveUserInfo(@RequestBody UserInformation user){
         return new ResponseEntity<>(userInformationService.saveUserInfo(user), HttpStatus.OK);
     }
@@ -111,7 +111,7 @@ public class UserController {
         return new ResponseEntity<>(skillsService.getAllSkillsByUserId(userId), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/saveSkills")
+    @PostMapping(value = "/saveSkills")
     public ResponseEntity<?> saveSkills(@RequestBody Skills skills){
         return new ResponseEntity<>(skillsService.saveSkills(skills), HttpStatus.OK);
     }
