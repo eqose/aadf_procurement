@@ -16,6 +16,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -62,13 +65,39 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable()
-                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
+        // CORS configuration
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.addAllowedOrigin("http://localhost:4200"); // Allow requests from this origin
+        corsConfiguration.addAllowedMethod("*"); // Allow all HTTP methods
+        corsConfiguration.addAllowedHeader("*"); // Allow all headers
+        corsConfiguration.setAllowCredentials(true); // Allow sending cookies
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", corsConfiguration);
+
+        // Apply CORS configuration to the entire application
+        http.cors().and().csrf().disable();
+
+        // Other configurations
+        http.exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeRequests().antMatchers("/teamFinder/auth/**").permitAll()
+                .authorizeRequests()
+                .antMatchers("/teamFinder/auth/**").permitAll()
                 .antMatchers("/teamFinder/**").permitAll()
                 .anyRequest().permitAll();
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+    }
+
+    @Bean
+    public CorsFilter corsFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+        config.addAllowedOrigin("http://localhost:4200"); // Allow requests from this origin
+        config.addAllowedMethod("*"); // Allow all HTTP methods
+        config.addAllowedHeader("*"); // Allow all headers
+        config.setAllowCredentials(true); // Allow sending cookies
+        source.registerCorsConfiguration("/**", config);
+        return new CorsFilter(source);
     }
 }
