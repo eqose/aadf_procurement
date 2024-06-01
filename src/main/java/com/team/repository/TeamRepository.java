@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface TeamRepository extends JpaRepository<Team, Long>, JpaSpecificationExecutor<Team> {
 
-    @Query(value = "SELECT t FROM Team t join TeamMembers m where m.user.id = ?")
+    @Query(value = "SELECT t FROM Team t join TeamMembers m where m.user.id = :id")
     List<Team> getTeamsByUserId (Long id);
 
     List<Team> getTeamsByTheme_Id (Long themeId);

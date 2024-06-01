@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
+@RequestMapping("/teams-ml")
 public class ModelRequest {
     private final ServiceModuleML serviceModuleML;
 
