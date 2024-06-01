@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
+@RequestMapping("/teams-ml")
 public class ModelRequest {
     private final ServiceModuleML serviceModuleML;
 
@@ -17,8 +18,8 @@ public class ModelRequest {
     }
 
     @GetMapping("/send-user")
-    public String sendUser(@RequestParam String userData) {
-//        String userData = "{\"gender\": \"male\", \"age\": 30, \"profession\": \"engineer\", \"location\": \"new york\"}";
+    public String sendUser() {
+        String userData = "{\"gender\": \"male\", \"age\": 30, \"profession\": \"engineer\", \"location\": \"new york\"}";
         return this.serviceModuleML.getBestGroup(userData);
     }
 

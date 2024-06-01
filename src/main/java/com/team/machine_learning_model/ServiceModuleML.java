@@ -12,10 +12,7 @@ import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.stereotype.Service;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -71,7 +68,7 @@ public class ServiceModuleML {
 
     public String getBestGroup(String userData) {
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
-            URI uri = new URI("http://127.0.0.1:5000/predict_group");
+            URI uri = new URI("http://127.0.0.1:5000/predict_best_team");
             HttpPost request = new HttpPost(uri);
             StringEntity entity = new StringEntity(userData);
             request.setEntity(entity);
@@ -96,5 +93,20 @@ public class ServiceModuleML {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public void updateCSV() {
+        String csvFile = "yourfile.csv";
+        try {
+            FileWriter writer = new FileWriter(csvFile, true); // Set true for appending data to existing file
+            // Write your data to the CSV file
+            writer.append("Column1,Column2,Column3\n");
+            writer.append("Value1,Value2,Value3\n");
+            writer.flush();
+            writer.close();
+            System.out.println("CSV file updated successfully.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
