@@ -1,12 +1,13 @@
 package com.team.controllers;
 
-import com.team.entity.ERole;
-import com.team.entity.Role;
-import com.team.entity.User;
+import com.team.entity.*;
 import com.team.repository.RoleRepository;
 import com.team.repository.UserRepository;
+import com.team.services.SkillsServiceImpl;
+import com.team.services.UserInformationService;
 import com.team.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,9 +28,12 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private RoleRepository roleRepository;
+    private UserInformationService userInformationService;
     @Autowired
-    private PasswordEncoder encoder;
+    private SkillsServiceImpl skillsService;
+    @Autowired
+    private RoleRepository roleRepository;
+
 
 //    @PostConstruct
 //    public void generateAdmin() {
@@ -45,45 +49,72 @@ public class UserController {
 //        }
 //}
 
+    /**
+     * @param username
+     * @param teamId
+     * @return
+     */
+    @PostMapping(value = "/joinTeam")
+    public ResponseEntity<?> joinTeam(@Param(value = "username") String username, @Param(value = "teamId") Long teamId){
+        return userService.joinTeam(username, teamId);
+    }
 
     /**
-//     * @param username
-//     * @param courseName
-//     * @return
-//     */
-//    @PostMapping(value = "/joinCourse/username/{username}")
-//    public ResponseEntity<?> joinCourse(@PathVariable String username,@RequestBody String courseName){
-//        return userService.joinCourse(username,courseName);
-//    }
-//
-//    /**
-//     * @param username
-//     * @param courseName
-//     * @return
-//     */
-//    @PostMapping(value = "/leaveCourse/username/{username}")
-//    public ResponseEntity<?> leaveCourse(@PathVariable String username,@RequestBody String courseName){
-//        return userService.leaveCourse(username,courseName);
-//    }
-//
-//    /**
-//     * @param username
-//     * @return
-//     */
-//    @GetMapping(value = "/allCourses/username/{username}")
-//    public ResponseEntity<?> getCoursesByUser(@PathVariable String username){
-//        return userService.getCoursesByUser(username);
-//    }
-//
-//    /**
-//     * @param userId
-//     * @return
-//     */
-//    @GetMapping(value = "/getUser/{userId}")
-//    public ResponseEntity<?> getUserById(@PathVariable String userId){
-//        return new ResponseEntity<>(userRepository.findById(userId).get(), HttpStatus.OK);
-//    }
+     * @param username
+     * @param teamId
+     * @return
+     */
+    @PostMapping(value = "/leaveTeam/username")
+    public ResponseEntity<?> leaveTeam(@Param(value = "username") String username, @Param(value = "teamId") Long teamId){
+        return userService.leaveTeams(username, teamId);
+    }
 
+    /**
+     * @param username
+     * @return
+     */
+    @GetMapping(value = "/allTeams/username/{username}")
+    public ResponseEntity<?> getTeamsByUser(@PathVariable String username){
+        return userService.getTeamsByUser(username);
+    }
+
+    /**
+     * @param userId
+     * @return
+     */
+    @GetMapping(value = "/getUser/{userId}")
+    public ResponseEntity<?> getUserById(@PathVariable Long userId){
+        return new ResponseEntity<>(userRepository.findById(userId).get(), HttpStatus.OK);
+    }
+
+    /**
+     * @param userId
+     * @return
+     */
+    @GetMapping(value = "/getUserInfo/{userId}")
+    public ResponseEntity<?> getUserInfoById(@PathVariable Long userId){
+        return new ResponseEntity<>(userInformationService.getUserInfoById(userId), HttpStatus.OK);
+    }
+
+
+    @PostMapping(value = "/saveUserInfo")
+    public ResponseEntity<?> saveUserInfo(@RequestBody UserInformation user){
+        return new ResponseEntity<>(userInformationService.saveUserInfo(user), HttpStatus.OK);
+    }
+
+    /**
+     * @param userId
+     * @return
+     */
+    @GetMapping(value = "/getSkills/{userId}")
+    public ResponseEntity<?> getSkillsByUserId(@PathVariable Long userId){
+        return new ResponseEntity<>(skillsService.getAllSkillsByUserId(userId), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/saveSkills")
+    public ResponseEntity<?> saveSkills(@RequestBody Skills skills){
+        return new ResponseEntity<>(skillsService.saveSkills(skills), HttpStatus.OK);
+    }
     /**
      * @param username
      * @return
@@ -92,12 +123,12 @@ public class UserController {
     public ResponseEntity<?> getUserByUsername(@PathVariable String username){
         return new ResponseEntity<>(userRepository.findByUsername(username).get(), HttpStatus.OK);
     }
-
-    /**
-     * @param predicate
-     * @param pageable
-     * @return
-     */
+//
+//    /**
+//     * @param predicate
+//     * @param pageable
+//     * @return
+//     */
 //    @GetMapping(value = "/all")
 //    public ResponseEntity<Page<User>> getAllUsers(@QuerydslPredicate Predicate predicate,
 //                                                  @PageableDefault(sort = {"username"}, direction = Sort.Direction.DESC) Pageable pageable) {

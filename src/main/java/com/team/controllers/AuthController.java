@@ -104,17 +104,17 @@ public class AuthController {
                 registerRequest.getEmail(),
                 encoder.encode(registerRequest.getPassword()));
 
-        Role strRoles = registerRequest.getRole();
+        String strRoles = registerRequest.getRole();
         Role role = new Role();
 
         if (strRoles == null) {
             role = roleRepository.findByName(ERole.USER)
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
         } else {
-                if ("ADMIN".equals(strRoles.getName().name())) {
+                if ("ADMIN".equals(strRoles)) {
                     role = roleRepository.findByName(ERole.ADMIN)
                             .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                } else if ("USER".equals((strRoles.getName().name()))) {
+                } else if ("USER".equals((strRoles))) {
                     role = roleRepository.findByName(ERole.USER)
                             .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                 }
