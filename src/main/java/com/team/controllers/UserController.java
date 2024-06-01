@@ -3,8 +3,10 @@ package com.team.controllers;
 import com.team.entity.ERole;
 import com.team.entity.Role;
 import com.team.entity.User;
+import com.team.entity.UserInformation;
 import com.team.repository.RoleRepository;
 import com.team.repository.UserRepository;
+import com.team.services.SkillsServiceImpl;
 import com.team.services.UserInformationService;
 import com.team.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,9 +33,10 @@ public class UserController {
     @Autowired
     private UserInformationService userInformationService;
     @Autowired
-    private RoleRepository roleRepository;
+    private SkillsServiceImpl skillsService;
     @Autowired
-    private PasswordEncoder encoder;
+    private RoleRepository roleRepository;
+
 
 //    @PostConstruct
 //    public void generateAdmin() {
@@ -87,6 +90,29 @@ public class UserController {
         return new ResponseEntity<>(userRepository.findById(userId).get(), HttpStatus.OK);
     }
 
+    /**
+     * @param userId
+     * @return
+     */
+    @GetMapping(value = "/getUserInfo/{userId}")
+    public ResponseEntity<?> getUserInfoById(@PathVariable Long userId){
+        return new ResponseEntity<>(userInformationService.getUserInfoById(userId), HttpStatus.OK);
+    }
+
+
+    @GetMapping(value = "/saveUserInfo")
+    public ResponseEntity<?> saveUserInfo(@RequestBody UserInformation user){
+        return new ResponseEntity<>(userInformationService.saveUserInfo(user), HttpStatus.OK);
+    }
+
+    /**
+     * @param userId
+     * @return
+     */
+    @GetMapping(value = "/getSkills/{userId}")
+    public ResponseEntity<?> getSkillsByUserId(@PathVariable Long userId){
+        return new ResponseEntity<>(skillsService.getAllSkillsByUserId(userId), HttpStatus.OK);
+    }
     /**
      * @param username
      * @return

@@ -18,11 +18,11 @@ public class SkillsServiceImpl {
     }
 
 
-    List<Skills> getAllSkills(){
+    public List<Skills> getAllSkills(){
         return this.skillsRepository.findAll();
     }
 
-    List<Skills>getAllSkillsByID(Long id){
+    public List<Skills>getAllSkillsByUserId(Long id){
         return this.skillsRepository.findByUser_Id(id);
     }
 

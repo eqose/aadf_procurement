@@ -17,15 +17,15 @@ public class UserInformationService {
         this.userInformationRepository = userInformationRepository;
     }
 
-    List<UserInformation> getAllUsersInfo(){
+    public List<UserInformation> getAllUsersInfo(){
         return this.userInformationRepository.findAll();
     }
 
-    UserInformation saveUserInfo (UserInformation userInfo){
+    public UserInformation saveUserInfo (UserInformation userInfo){
         return this.userInformationRepository.save(userInfo);
     }
 
-    UserInformation getUserInfoById (Long id){
+    public UserInformation getUserInfoById (Long id){
         return this.userInformationRepository.findByUser_Id(id);
     }
 
