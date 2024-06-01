@@ -48,30 +48,29 @@ public class UserService {
         }
     }
 
-//    /**
-//     * @param username
-//     * @param teamId
-//     * @return
-//     */
-//    public ResponseEntity<?> leaveTeams(String username, Long teamId){
-//        try{
-//            User user=userRepository.findByUsername(username)
-//                    .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
-//            Team team = this.teamService.getTeamById(teamId);
-//            if(this.teamMembersRepository){
-//                courses.remove(courseName);
-//                user.setCourses(courses);
-//                courseService.deleteUserFromCourse(courseName,username);
-//                return new ResponseEntity<>(userRepository.save(user),HttpStatus.OK);
-//            }
-//            else{
-//                return new ResponseEntity<>("You are not part of this course.",HttpStatus.CONFLICT);
-//            }
-//        }
-//        catch (Exception e){
-//            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//    }
+    /**
+     * @param username
+     * @param teamId
+     * @return
+     */
+    public ResponseEntity<?> leaveTeams(String username, Long teamId){
+        try{
+            User user=userRepository.findByUsername(username)
+                    .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
+            Team team = this.teamService.getTeamById(teamId);
+            TeamMembers byUserIdAndTeamId = this.teamMembersRepository.findByUser_IdAndTeam_Id(user.getId(), team.getId());
+            if(byUserIdAndTeamId !=null){
+                teamMembersRepository.deleteById(byUserIdAndTeamId.getId());
+                return new ResponseEntity<>(userRepository.save(user),HttpStatus.OK);
+            }
+            else{
+                return new ResponseEntity<>("You are not part of this course.",HttpStatus.CONFLICT);
+            }
+        }
+        catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     /**
      * @param username
