@@ -1,28 +1,24 @@
 package com.team.services;
 
 import com.team.entity.InviteRequest;
-import com.team.entity.User;
 import com.team.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class FriendRequestService {
+public class InvitationRequestService {
 
 //    @Autowired
 //    private UserRepository userRepository;
-//
-//    /**
-//     * @param senderId
-//     * @param receiverId
-//     * @return
-//     */
+
+    /**
+     * @param senderId
+     * @param receiverId
+     * @return
+     */
 //    public ResponseEntity<?> newFriendRequest(String senderId, String receiverId){
 //        try{
 //            Optional<User> sender=userRepository.findById(senderId);

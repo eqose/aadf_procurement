@@ -26,7 +26,7 @@ public class RegisterRequest {
 
     private String lastName;
 
-    private Role role;
+    private String role;
 
     @NotNull
     @Size(max=120)

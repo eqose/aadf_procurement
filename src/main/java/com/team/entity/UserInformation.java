@@ -1,11 +1,10 @@
 package com.team.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
@@ -48,6 +47,7 @@ public class UserInformation {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @NotNull
     private User user;
 
 }

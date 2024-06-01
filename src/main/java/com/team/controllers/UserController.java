@@ -79,10 +79,10 @@ public class UserController {
 //     * @param userId
 //     * @return
 //     */
-//    @GetMapping(value = "/getUser/{userId}")
-//    public ResponseEntity<?> getUserById(@PathVariable String userId){
-//        return new ResponseEntity<>(userRepository.findById(userId).get(), HttpStatus.OK);
-//    }
+    @GetMapping(value = "/getUser/{userId}")
+    public ResponseEntity<?> getUserById(@PathVariable Long userId){
+        return new ResponseEntity<>(userRepository.findById(userId).get(), HttpStatus.OK);
+    }
 
     /**
      * @param username
