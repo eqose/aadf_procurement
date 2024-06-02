@@ -2,6 +2,8 @@ package com.team.controllers;
 
 import com.team.entity.*;
 import com.team.repository.RoleRepository;
+import com.team.repository.TeamMembersRepository;
+import com.team.repository.UserInformationRepository;
 import com.team.repository.UserRepository;
 import com.team.services.SkillsServiceImpl;
 import com.team.services.UserInformationService;
@@ -10,16 +12,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
-@CrossOrigin(origins="http://localhost:4200")
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/teamFinder/user")
 public class UserController {
 
@@ -33,6 +34,15 @@ public class UserController {
     private SkillsServiceImpl skillsService;
     @Autowired
     private RoleRepository roleRepository;
+
+    private final TeamMembersRepository teamMembersRepository;
+    private final UserInformationRepository userInformationRepository;
+
+    public UserController(TeamMembersRepository teamMembersRepository,
+                          UserInformationRepository userInformationRepository) {
+        this.teamMembersRepository = teamMembersRepository;
+        this.userInformationRepository = userInformationRepository;
+    }
 
 
 //    @PostConstruct
@@ -55,7 +65,7 @@ public class UserController {
      * @return
      */
     @PostMapping(value = "/joinTeam")
-    public ResponseEntity<?> joinTeam(@Param(value = "username") String username, @Param(value = "teamId") Long teamId){
+    public ResponseEntity<?> joinTeam(@Param(value = "username") String username, @Param(value = "teamId") Long teamId) {
         return userService.joinTeam(username, teamId);
     }
 
@@ -65,7 +75,7 @@ public class UserController {
      * @return
      */
     @PostMapping(value = "/leaveTeam/username")
-    public ResponseEntity<?> leaveTeam(@Param(value = "username") String username, @Param(value = "teamId") Long teamId){
+    public ResponseEntity<?> leaveTeam(@Param(value = "username") String username, @Param(value = "teamId") Long teamId) {
         return userService.leaveTeams(username, teamId);
     }
 
@@ -74,7 +84,7 @@ public class UserController {
      * @return
      */
     @GetMapping(value = "/allTeams/username/{username}")
-    public ResponseEntity<?> getTeamsByUser(@PathVariable String username){
+    public ResponseEntity<?> getTeamsByUser(@PathVariable String username) {
         return userService.getTeamsByUser(username);
     }
 
@@ -83,7 +93,7 @@ public class UserController {
      * @return
      */
     @GetMapping(value = "/getUser/{userId}")
-    public ResponseEntity<?> getUserById(@PathVariable Long userId){
+    public ResponseEntity<?> getUserById(@PathVariable Long userId) {
         return new ResponseEntity<>(userRepository.findById(userId).get(), HttpStatus.OK);
     }
 
@@ -92,13 +102,13 @@ public class UserController {
      * @return
      */
     @GetMapping(value = "/getUserInfo/{userId}")
-    public ResponseEntity<?> getUserInfoById(@PathVariable Long userId){
+    public ResponseEntity<?> getUserInfoById(@PathVariable Long userId) {
         return new ResponseEntity<>(userInformationService.getUserInfoById(userId), HttpStatus.OK);
     }
 
 
     @PostMapping(value = "/saveUserInfo")
-    public ResponseEntity<?> saveUserInfo(@RequestBody UserInformation user){
+    public ResponseEntity<?> saveUserInfo(@RequestBody UserInformation user) {
         return new ResponseEntity<>(userInformationService.saveUserInfo(user), HttpStatus.OK);
     }
 
@@ -107,20 +117,21 @@ public class UserController {
      * @return
      */
     @GetMapping(value = "/getSkills/{userId}")
-    public ResponseEntity<?> getSkillsByUserId(@PathVariable Long userId){
+    public ResponseEntity<?> getSkillsByUserId(@PathVariable Long userId) {
         return new ResponseEntity<>(skillsService.getAllSkillsByUserId(userId), HttpStatus.OK);
     }
 
     @PostMapping(value = "/saveSkills")
-    public ResponseEntity<?> saveSkills(@RequestBody Skills skills){
+    public ResponseEntity<?> saveSkills(@RequestBody Skills skills) {
         return new ResponseEntity<>(skillsService.saveSkills(skills), HttpStatus.OK);
     }
+
     /**
      * @param username
      * @return
      */
     @GetMapping(value = "/getUserByUsername/{username}")
-    public ResponseEntity<?> getUserByUsername(@PathVariable String username){
+    public ResponseEntity<?> getUserByUsername(@PathVariable String username) {
         return new ResponseEntity<>(userRepository.findByUsername(username).get(), HttpStatus.OK);
     }
 //
@@ -143,16 +154,29 @@ public class UserController {
      * @param updatedUser
      * @return
      */
-    @PostMapping(value= "/updateUser/{userId}")
-    public ResponseEntity<?> editUser(@PathVariable Long userId,@RequestBody User updatedUser){
-        Optional<User> user=userRepository.findById(userId);
-        if(user.isPresent()){
-            if(!user.get().getUsername().equals(updatedUser.getUsername()) && userRepository.findByUsername(updatedUser.getUsername()).isPresent()) {
-                    return new ResponseEntity<>("This username is taken!", HttpStatus.BAD_REQUEST);
+    @PostMapping(value = "/updateUser/{userId}")
+    public ResponseEntity<?> editUser(@PathVariable Long userId, @RequestBody User updatedUser) {
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isPresent()) {
+            if (!user.get().getUsername().equals(updatedUser.getUsername()) && userRepository.findByUsername(updatedUser.getUsername()).isPresent()) {
+                return new ResponseEntity<>("This username is taken!", HttpStatus.BAD_REQUEST);
             }
             return new ResponseEntity<>(userRepository.save(updatedUser), HttpStatus.OK);
-        }
-        else
+        } else
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping(value = "/user-teams/{teamId}")
+    public List<UserInformation> getUsersOfTeam(@PathVariable("teamId") Long teamId) {
+        List<UserInformation> usersI = new ArrayList<>();
+        List<User> users = this.teamMembersRepository.getAllByTeam_Id(teamId)
+                .stream()
+                .map(TeamMembers::getUser)
+                .collect(Collectors.toList());
+        for (User u: users) {
+            UserInformation ui = this.userInformationRepository.findByUser_Id(u.getId());
+            usersI.add(ui);
+        }
+        return usersI;
     }
 }

@@ -63,12 +63,12 @@ public class TeamController {
         return new ResponseEntity<>(ratingService.saveRatings(ratings), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/getRatings/{team-id}")
-    public ResponseEntity<?> getRatingsByTeamId(@PathVariable("team-id") Long teamId){
+    @GetMapping(value = "/getRatings-team/{teamid}")
+    public ResponseEntity<?> getRatingsByTeamId(@PathVariable("teamid") Long teamId){
         return new ResponseEntity<>(ratingService.getRatingsByTeamId(teamId), HttpStatus.OK);
     }
-    @GetMapping(value = "/getRatings/{user-id}")
-    public ResponseEntity<?> getRatingsByUserId(@PathVariable("user-id") Long userId){
+    @GetMapping(value = "/getRatings-user/{userid}")
+    public ResponseEntity<?> getRatingsByUserId(@PathVariable("userid") Long userId){
         return new ResponseEntity<>(ratingService.getRatingsByUserId(userId), HttpStatus.OK);
     }
 }
