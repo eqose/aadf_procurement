@@ -4,6 +4,7 @@ import com.team.entity.Team;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -11,8 +12,8 @@ import java.util.List;
 @Repository
 public interface TeamRepository extends JpaRepository<Team, Long>, JpaSpecificationExecutor<Team> {
 
-    @Query(value = "SELECT t FROM Team t join TeamMembers m where m.user.id = :id")
-    List<Team> getTeamsByUserId (Long id);
+    @Query(value = "SELECT t FROM Team t join TeamMembers m on m.team.id=t.id where m.user.id = :id")
+    List<Team> getTeamsByUserId (@Param("id") Long id);
 
     List<Team> getTeamsByTheme_Id (Long themeId);
 

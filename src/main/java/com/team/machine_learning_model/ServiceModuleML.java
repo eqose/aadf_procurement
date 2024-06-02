@@ -1,10 +1,12 @@
 package com.team.machine_learning_model;
 
+import com.team.entity.User;
+import com.team.entity.UserInformation;
+import com.team.repository.UserInformationRepository;
+import com.team.repository.UserRepository;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
@@ -15,11 +17,23 @@ import org.springframework.stereotype.Service;
 import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ServiceModuleML {
+    private final UserRepository userRepository;
+    private final UserInformationRepository userInformationRepository;
+
+    public ServiceModuleML(UserRepository userRepository,
+                           UserInformationRepository userInformationRepository) {
+        this.userRepository = userRepository;
+        this.userInformationRepository = userInformationRepository;
+    }
 
     public String splitUsersToGroups() {
+//        this.updateCSV();
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
             URI uri = new URI("http://127.0.0.1:5000/split_users");
 
@@ -96,12 +110,40 @@ public class ServiceModuleML {
     }
 
     public void updateCSV() {
-        String csvFile = "yourfile.csv";
+        List<UserInformation> infos = this.userInformationRepository.findAll();
+        String desktopPath = System.getProperty("user.home") + "/Desktop/";
+        String csvFile = Paths.get(desktopPath, "dummy_data.csv").toString();
         try {
             FileWriter writer = new FileWriter(csvFile, true); // Set true for appending data to existing file
             // Write your data to the CSV file
-            writer.append("Column1,Column2,Column3\n");
-            writer.append("Value1,Value2,Value3\n");
+            writer.append("id,age,gender,qualification,education,profession,position,company,experience,location\n");
+            infos.forEach(el -> {
+                try {
+                    writer.append("\n")
+                            .append(String.valueOf(el.getUser().getId()))
+                            .append(",")
+                            .append(String.valueOf(el.getAge()))
+                            .append(",")
+                            .append(el.getGender())
+                            .append(",")
+                            .append(el.getQualification())
+                            .append(",")
+                            .append(el.getEducation())
+                            .append(",")
+                            .append(el.getProfession())
+                            .append(",")
+                            .append(el.getPosition())
+                            .append(",")
+                            .append(el.getCompany())
+                            .append(",")
+                            .append(String.valueOf(el.getExperience()))
+                            .append(",")
+                            .append(el.getLocation());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+
             writer.flush();
             writer.close();
             System.out.println("CSV file updated successfully.");

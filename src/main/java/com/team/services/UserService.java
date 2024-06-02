@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -53,22 +54,20 @@ public class UserService {
      * @param teamId
      * @return
      */
-    public ResponseEntity<?> leaveTeams(String username, Long teamId){
-        try{
-            User user=userRepository.findByUsername(username)
+    public ResponseEntity<?> leaveTeams(String username, Long teamId) {
+        try {
+            User user = userRepository.findByUsername(username)
                     .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
             Team team = this.teamService.getTeamById(teamId);
             TeamMembers byUserIdAndTeamId = this.teamMembersRepository.findByUser_IdAndTeam_Id(user.getId(), team.getId());
-            if(byUserIdAndTeamId !=null){
+            if (byUserIdAndTeamId != null) {
                 teamMembersRepository.deleteById(byUserIdAndTeamId.getId());
-                return new ResponseEntity<>(userRepository.save(user),HttpStatus.OK);
+                return new ResponseEntity<>(userRepository.save(user), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("You are not part of this course.", HttpStatus.CONFLICT);
             }
-            else{
-                return new ResponseEntity<>("You are not part of this course.",HttpStatus.CONFLICT);
-            }
-        }
-        catch (Exception e){
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -76,14 +75,17 @@ public class UserService {
      * @param username
      * @return
      */
-    public ResponseEntity<?> getTeamsByUser(String username){
+    public ResponseEntity<?> getTeamsByUser(String username) {
+        List<Team> teams = new ArrayList<>();
         try {
-            User user = userRepository.findByUsername(username)
-                    .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));
-            return new ResponseEntity<>(this.teamService.getTeamsByUserId(user.getId()),HttpStatus.OK);
-        }
-        catch (Exception e){
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+            List<User> user = userRepository.findByUsernameLike("%" + username + "%");
+            for (User u : user) {
+                List<Team> t = this.teamService.getTeamsByUserId(u.getId());
+                teams.addAll(t);
+            }
+            return new ResponseEntity<>(teams, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
