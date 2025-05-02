@@ -28,4 +28,11 @@ public class Evaluation extends BaseEntity {
 
     private String comments;
     private LocalDateTime scoredAt;
+
+    public int getTotalScore() {
+        return criterionScores.values()
+                .stream()
+                .mapToInt(Integer::intValue)
+                .sum();
+    }
 }

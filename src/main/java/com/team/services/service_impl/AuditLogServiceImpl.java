@@ -27,4 +27,14 @@ public class AuditLogServiceImpl implements AuditLogService {
     public List<AuditLog> findByUser(User user) {
         return repo.findByUser_Id(user.getId());
     }
+
+    @Override
+    public AuditLog recordData(User actor, String action, String details) {
+        AuditLog log = new AuditLog();
+        log.setUser(actor);
+        log.setAction(action);
+        log.setDetails(details);
+        log.setEventTime(LocalDateTime.now());
+        return repo.save(log);
+    }
 }

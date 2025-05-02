@@ -9,4 +9,6 @@ public interface AuditLogService {
     AuditLog record(AuditLog log);
 
     List<AuditLog> findByUser(User user);
+
+    AuditLog recordData(User actor, String action, String details);
 }
