@@ -1,7 +1,7 @@
 package com.team.security.jwt;
 
 
-import com.team.services.UserDetailsImpl;
+import com.team.services.service_impl.UserDetailsImpl;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
