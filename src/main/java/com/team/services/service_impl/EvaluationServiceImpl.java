@@ -40,7 +40,7 @@ public class EvaluationServiceImpl implements EvaluationService {
         Map<String, Integer> suggestions = ai.suggestScores(eval.getCriterionScores());
         eval.getCriterionScores().putAll(suggestions);
         Evaluation saved = repo.save(eval);
-        audit.recordData(null, "OFFER_SCORED", "Evaluation " + saved.getId() + " suggested scores: " + suggestions);
+        audit.recordData(LoggedUser.getUsername(), "OFFER_SCORED", "Evaluation " + saved.getId() + " suggested scores: " + suggestions);
         // Notify vendor of scoring
         Notification note = new Notification();
         note.setRecipient(eval.getOffer().getVendor());
@@ -61,6 +61,6 @@ public class EvaluationServiceImpl implements EvaluationService {
     @Override
     public void delete(Long id) {
         repo.deleteById(id);
-        audit.recordData(null, "DELETE_EVALUATION", "Evaluation deleted: " + id);
+        audit.recordData(LoggedUser.getUsername(), "DELETE_EVALUATION", "Evaluation deleted: " + id);
     }
 }

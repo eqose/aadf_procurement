@@ -10,5 +10,5 @@ public interface AuditLogService {
 
     List<AuditLog> findByUser(User user);
 
-    AuditLog recordData(User actor, String action, String details);
+    AuditLog recordData(String actorUserName, String action, String details);
 }

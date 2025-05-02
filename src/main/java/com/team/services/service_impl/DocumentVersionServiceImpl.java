@@ -36,7 +36,7 @@ public class DocumentVersionServiceImpl implements DocumentVersionService {
         dv.setVersion(nextVersion);
         dv.setUploadedAt(LocalDateTime.now());
         DocumentVersion saved = repo.save(dv);
-        audit.recordData(null, "DOCUMENT_UPLOADED", "DocumentVersion " + saved.getId() + " version " + nextVersion);
+        audit.recordData(LoggedUser.getUsername(), "DOCUMENT_UPLOADED", "DocumentVersion " + saved.getId() + " version " + nextVersion);
         return saved;
     }
 
@@ -55,6 +55,6 @@ public class DocumentVersionServiceImpl implements DocumentVersionService {
     @Override
     public void delete(Long id) {
         repo.deleteById(id);
-        audit.recordData(null, "DELETE_DOCUMENT", "DocumentVersion deleted: " + id);
+        audit.recordData(LoggedUser.getUsername(), "DELETE_DOCUMENT", "DocumentVersion deleted: " + id);
     }
 }

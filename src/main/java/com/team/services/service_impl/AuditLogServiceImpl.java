@@ -29,9 +29,9 @@ public class AuditLogServiceImpl implements AuditLogService {
     }
 
     @Override
-    public AuditLog recordData(User actor, String action, String details) {
+    public AuditLog recordData(String actorUsername, String action, String details) {
         AuditLog log = new AuditLog();
-        log.setUser(actor);
+        log.setUser(null);
         log.setAction(action);
         log.setDetails(details);
         log.setEventTime(LocalDateTime.now());

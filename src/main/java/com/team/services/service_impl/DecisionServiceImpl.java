@@ -33,7 +33,7 @@ public class DecisionServiceImpl implements DecisionService {
     public Decision decide(Decision decision) {
         decision.setDecidedAt(LocalDateTime.now());
         Decision saved = repo.save(decision);
-        audit.recordData(null, "DECISION_MADE", "Decision " + saved.getId() + " on Tender " + decision.getTender().getId());
+        audit.recordData(LoggedUser.getUsername(), "DECISION_MADE", "Decision " + saved.getId() + " on Tender " + decision.getTender().getId());
         // Notify winning vendor
         Notification note = new Notification();
         note.setRecipient(decision.getWinningOffer().getVendor());
@@ -50,6 +50,6 @@ public class DecisionServiceImpl implements DecisionService {
     @Override
     public void delete(Long id) {
         repo.deleteById(id);
-        audit.recordData(null, "DELETE_DECISION", "Decision deleted: " + id);
+        audit.recordData(LoggedUser.getUsername(), "DELETE_DECISION", "Decision deleted: " + id);
     }
 }

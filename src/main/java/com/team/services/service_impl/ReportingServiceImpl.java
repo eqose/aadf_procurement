@@ -122,7 +122,7 @@ public class ReportingServiceImpl implements ReportingService {
             }
 
             doc.close();
-            audit.recordData(null, "GENERATE_REPORT", "Generated report for Tender " + tenderId);
+            audit.recordData(LoggedUser.getUsername(), "GENERATE_REPORT", "Generated report for Tender " + tenderId);
             return baos.toByteArray();
         } catch (Exception ex) {
             throw new RuntimeException("Failed to generate report for tender " + tenderId, ex);

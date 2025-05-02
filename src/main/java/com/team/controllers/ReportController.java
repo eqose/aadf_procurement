@@ -37,7 +37,7 @@ public class ReportController {
         String username = principal.getName();
         User actor = userService.findByUsername(username)
                 .orElseThrow(() -> new IllegalStateException("User not found: " + username));
-        auditLogService.recordData(actor, "GENERATE_REPORT", "Generated report for Tender " + tenderId);
+        auditLogService.recordData(actor.getUsername(), "GENERATE_REPORT", "Generated report for Tender " + tenderId);
 
         // Return PDF as attachment
         return ResponseEntity.ok()

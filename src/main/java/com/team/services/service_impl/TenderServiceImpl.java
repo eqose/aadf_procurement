@@ -40,7 +40,7 @@ public class TenderServiceImpl implements TenderService {
     public Tender create(Tender tender) {
         tender.setPublished(false);
         Tender saved = repo.save(tender);
-        audit.recordData(null, "CREATE_TENDER", "Tender created: " + saved.getId());
+        audit.recordData(LoggedUser.getUsername(), "CREATE_TENDER", "Tender created: " + saved.getId());
         return saved;
     }
 
@@ -59,7 +59,7 @@ public class TenderServiceImpl implements TenderService {
         t.setPublished(true);
         t.setDeadline(LocalDateTime.now().plusDays(7)); // example: 7-day window
         Tender updated = repo.save(t);
-        audit.recordData(null, "PUBLISH_TENDER", "Tender published: " + id);
+        audit.recordData(LoggedUser.getUsername(), "PUBLISH_TENDER", "Tender published: " + id);
 
         // Notify all vendors
         List<User> vendors = userRepo.findAll().stream()
@@ -78,13 +78,13 @@ public class TenderServiceImpl implements TenderService {
     @Override
     public Tender update(Tender tender) {
         Tender updated = repo.save(tender);
-        audit.recordData(null, "UPDATE_TENDER", "Tender updated: " + updated.getId());
+        audit.recordData(LoggedUser.getUsername(), "UPDATE_TENDER", "Tender updated: " + updated.getId());
         return updated;
     }
 
     @Override
     public void delete(Long id) {
         repo.deleteById(id);
-        audit.recordData(null, "DELETE_TENDER", "Tender deleted: " + id);
+        audit.recordData(LoggedUser.getUsername(), "DELETE_TENDER", "Tender deleted: " + id);
     }
 }

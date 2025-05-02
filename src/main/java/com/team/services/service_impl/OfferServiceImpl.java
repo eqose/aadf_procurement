@@ -41,9 +41,9 @@ public class OfferServiceImpl implements OfferService {
         Offer saved = repo.save(offer);
         // AI extraction & validation
         AiExtractResult result = ai.extractFields(offer.getDocumentUrl());
-        audit.recordData(null, "OFFER_SUBMITTED", "Offer " + saved.getId() + " fields: " + result.getFields());
+        audit.recordData(LoggedUser.getUsername(), "OFFER_SUBMITTED", "Offer " + saved.getId() + " fields: " + result.getFields());
         if (!result.getMissing().isEmpty()) {
-            audit.recordData(null, "OFFER_MISSING_FIELDS", String.join(",", result.getMissing()));
+            audit.recordData(LoggedUser.getUsername(), "OFFER_MISSING_FIELDS", String.join(",", result.getMissing()));
         }
         // Notify procurement officer
         Notification note = new Notification();
@@ -73,6 +73,6 @@ public class OfferServiceImpl implements OfferService {
     @Override
     public void delete(Long id) {
         repo.deleteById(id);
-        audit.recordData(null, "DELETE_OFFER", "Offer deleted: " + id);
+        audit.recordData(LoggedUser.getUsername(), "DELETE_OFFER", "Offer deleted: " + id);
     }
 }
