@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/evaluations")
+@RequestMapping("/teamFinder/api/evaluations")
 @CrossOrigin(origins = "http://localhost:4200")
 public class EvaluationController {
     private final EvaluationService service;

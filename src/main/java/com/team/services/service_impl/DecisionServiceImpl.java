@@ -37,7 +37,7 @@ public class DecisionServiceImpl implements DecisionService {
         // Notify winning vendor
         Notification note = new Notification();
         note.setRecipient(decision.getWinningOffer().getVendor());
-        note.setMessage("Congratulations! Your offer won Tender " + decision.getTender().getTitle());
+        note.setMessage("Congratulations! Your offer won Tender " + decision.getTender().getSubject());
         note.setType("AWARD");
         notification.notify(note);
         return saved;

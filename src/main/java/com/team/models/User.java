@@ -12,8 +12,15 @@ import javax.persistence.*;
 @Setter
 @AllArgsConstructor
 public class User extends BaseEntity {
+
     @Column(nullable = false, unique = true)
     private String username;
+
+    private String firstName;
+
+    private String lastName;
+
+    private String email;
 
     @Column(nullable = false)
     private String password;
@@ -25,4 +32,6 @@ public class User extends BaseEntity {
     public User() {
 
     }
+
+
 }

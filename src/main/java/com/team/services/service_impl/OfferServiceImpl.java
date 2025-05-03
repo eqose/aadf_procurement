@@ -51,7 +51,7 @@ public class OfferServiceImpl implements OfferService {
         // Notify procurement officer
         Notification note = new Notification();
         note.setRecipient(offer.getTender().getCreatedBy());
-        note.setMessage("Offer submitted for Tender " + offer.getTender().getTitle());
+        note.setMessage("Offer submitted for Tender " + offer.getTender().getSubject());
         note.setType("OFFER_SUBMIT");
         notification.notify(note);
         return saved;

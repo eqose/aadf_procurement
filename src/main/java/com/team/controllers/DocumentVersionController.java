@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/documents")
+@RequestMapping("/teamFinder/api/documents")
 @CrossOrigin(origins = "http://localhost:4200")
 public class DocumentVersionController {
     private final DocumentVersionService service;

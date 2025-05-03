@@ -68,7 +68,7 @@ public class TenderServiceImpl implements TenderService {
         for (User v : vendors) {
             Notification note = new Notification();
             note.setRecipient(v);
-            note.setMessage("New tender published: " + t.getTitle());
+            note.setMessage("New tender published: " + t.getSubject());
             note.setType("TENDER_PUBLISH");
             notification.notify(note);
         }

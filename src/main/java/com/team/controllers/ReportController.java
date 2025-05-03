@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 
 @RestController
-@RequestMapping("/api/reports")
+@RequestMapping("/teamFinder/api/reports")
 @CrossOrigin(origins = "http://localhost:4200")
 public class ReportController {
     private final ReportingService reportingService;
