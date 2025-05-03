@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/tender-criteria")
+@RequestMapping("//teamFinder/api/tender-criteria")
 @CrossOrigin(origins = "http://localhost:4200")
 public class TenderCriterionController {
     private final TenderCriterionService service;

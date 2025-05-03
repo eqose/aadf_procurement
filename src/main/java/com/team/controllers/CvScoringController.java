@@ -13,7 +13,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/cv")
+@RequestMapping("/teamFinder/api/cv")
 @CrossOrigin(origins = "http://localhost:4200")
 public class CvScoringController {
 

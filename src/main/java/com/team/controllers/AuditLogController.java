@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/audit-logs")
+@RequestMapping("/teamFinder/api/audit-logs")
 @CrossOrigin(origins = "http://localhost:4200")
 public class AuditLogController {
     private final AuditLogService service;

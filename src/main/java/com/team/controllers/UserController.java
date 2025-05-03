@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/teamFinder/api/users")
 @CrossOrigin(origins = "http://localhost:4200")
 public class UserController {
     private final UserService userService;

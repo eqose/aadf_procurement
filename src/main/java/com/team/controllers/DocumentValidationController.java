@@ -8,7 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController
-@RequestMapping("/api/documents")
+@RequestMapping("/teamFinder/api/documents")
 @CrossOrigin(origins = "http://localhost:4200")
 public class DocumentValidationController {
     private final DocumentValidationService validator;
