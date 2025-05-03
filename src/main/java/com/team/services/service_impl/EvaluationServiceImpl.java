@@ -3,6 +3,7 @@ package com.team.services.service_impl;
 import com.team.models.Evaluation;
 import com.team.models.Notification;
 import com.team.models.Offer;
+import com.team.models.User;
 import com.team.repository.EvaluationRepository;
 import com.team.services.AiService;
 import com.team.services.AuditLogService;
@@ -62,5 +63,10 @@ public class EvaluationServiceImpl implements EvaluationService {
     public void delete(Long id) {
         repo.deleteById(id);
         audit.recordData(LoggedUser.getUsername(), "DELETE_EVALUATION", "Evaluation deleted: " + id);
+    }
+
+    @Override
+    public List<Evaluation> findByEvaluator(Long idEvaluator) {
+        return repo.findAllByEvaluator_Id(idEvaluator);
     }
 }

@@ -1,6 +1,7 @@
 package com.team.services.service_impl;
 
 import com.team.models.dtos.AiExtractResult;
+import com.team.resources.MultipartInputStreamFileResource;
 import com.team.services.AiService;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.core.ParameterizedTypeReference;
@@ -9,16 +10,23 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.reactive.function.BodyInserters;
+import org.springframework.web.reactive.function.client.WebClient;
 
+import java.io.IOException;
 import java.util.Map;
 
 @Service
 public class AiServiceImpl implements AiService {
     private final RestTemplate rest;
+    private final WebClient client;
     private static final String AI_BASE_URL = "http://localhost:8000";
 
-    public AiServiceImpl(RestTemplateBuilder builder) {
+    public AiServiceImpl(RestTemplateBuilder builder,
+                         WebClient client) {
         this.rest = builder.build();
+        this.client = client;
     }
 
     @Override
@@ -30,16 +38,24 @@ public class AiServiceImpl implements AiService {
     }
 
     @Override
+    public AiExtractResult extract(MultipartFile file) throws IOException {
+        return client.post().uri("/extract")
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+                .body(BodyInserters.fromMultipartData("file",
+                        new MultipartInputStreamFileResource(file.getInputStream(), file.getOriginalFilename())))
+                .retrieve()
+                .bodyToMono(AiExtractResult.class)
+                .block();
+    }
+
+    @Override
     public Map<String, Integer> suggestScores(Map<String, Integer> criteria) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<Map<String, Integer>> req = new HttpEntity<>(criteria, headers);
-        return rest.exchange(
-                AI_BASE_URL + "/suggest-scores",
-                org.springframework.http.HttpMethod.POST,
-                req,
-                new ParameterizedTypeReference<Map<String, Integer>>() {
-                }
-        ).getBody();
+        return client.post().uri("/suggest-scores")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(Map.of("criteria", criteria))
+                .retrieve()
+                .bodyToMono(new ParameterizedTypeReference<Map<String, Integer>>() {
+                })
+                .block();
     }
 }

@@ -38,4 +38,9 @@ public class EvaluationController {
     public void delete(@PathVariable Long id) {
         service.delete(id);
     }
+
+    @GetMapping("/evaluator/{evaluatorId}")
+    public List<Evaluation> listByEvaluator(@PathVariable Long evaluatorId) {
+        return service.findByEvaluator(evaluatorId);
+    }
 }

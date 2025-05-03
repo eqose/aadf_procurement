@@ -3,6 +3,7 @@ package com.team.services.service_impl;
 import com.team.models.Notification;
 import com.team.models.Offer;
 import com.team.models.Tender;
+import com.team.models.User;
 import com.team.models.dtos.AiExtractResult;
 import com.team.repository.OfferRepository;
 import com.team.services.AiService;
@@ -11,7 +12,9 @@ import com.team.services.NotificationService;
 import com.team.services.OfferService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -74,5 +77,13 @@ public class OfferServiceImpl implements OfferService {
     public void delete(Long id) {
         repo.deleteById(id);
         audit.recordData(LoggedUser.getUsername(), "DELETE_OFFER", "Offer deleted: " + id);
+    }
+
+    public Offer submit(MultipartFile file, Long tenderId, User vendor) throws Exception {
+        AiExtractResult res = ai.extract(file);
+        if (!res.getMissing().isEmpty()) {
+            throw new Exception("Missing fields: " + String.join(", ", res.getMissing()));
+        }
+        return null;
     }
 }
