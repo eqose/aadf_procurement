@@ -2,6 +2,7 @@ package com.team.services.service_impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.team.models.dtos.AutoValidationResponseDto;
 import com.team.models.dtos.CvScoresResponseDto;
 import com.team.models.dtos.RequirementDto;
 import com.team.services.CvScoringService;
@@ -84,5 +85,30 @@ public class CvScoringServiceImpl implements CvScoringService {
         } catch (Exception e) {
             throw new IllegalStateException(e);
         }
+    }
+
+    @Override
+    public AutoValidationResponseDto autoValidate(MultipartFile file) {
+        ByteArrayResource resource = new ByteArrayResource(getBytes(file)) {
+            @Override public String getFilename() { return file.getOriginalFilename(); }
+            @Override public long contentLength() { return file.getSize(); }
+        };
+
+        MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+        body.add("file", resource);
+
+        Mono<AutoValidationResponseDto> resp = client.post()
+                .uri("/auto-validate")
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+                .body(BodyInserters.fromMultipartData(body))
+                .retrieve()
+                .bodyToMono(AutoValidationResponseDto.class);
+
+        return resp.block();
+    }
+
+    private byte[] getBytes(MultipartFile file) {
+        try { return file.getBytes(); }
+        catch (Exception e) { throw new IllegalStateException(e); }
     }
 }

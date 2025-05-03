@@ -1,6 +1,7 @@
 package com.team.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.team.models.dtos.AutoValidationResponseDto;
 import com.team.models.dtos.CvScoresResponseDto;
 import com.team.models.dtos.RequirementDto;
 import com.team.services.CvScoringService;
@@ -42,5 +43,15 @@ public class CvScoringController {
                 new TypeReference<List<RequirementDto>>() {}
         );
         return scoringService.scoreCvs(requirements, cvs);
+    }
+
+    @PostMapping(
+            value = "/auto",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+    )
+    public AutoValidationResponseDto validateDocument(
+            @RequestPart("file") MultipartFile file
+    ) {
+        return this.scoringService.autoValidate(file);
     }
 }
