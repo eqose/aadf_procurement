@@ -63,7 +63,7 @@ public class TenderServiceImpl implements TenderService {
 
         // Notify all vendors
         List<User> vendors = userRepo.findAll().stream()
-                .filter(u -> u.getRole() == Role.VENDOR)
+                .filter(u -> u.getRole() == Role.VENDORS)
                 .toList();
         for (User v : vendors) {
             Notification note = new Notification();
