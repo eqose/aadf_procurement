@@ -2,6 +2,7 @@ package com.team.controllers;
 
 import com.team.models.User;
 import com.team.services.UserService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,16 +18,19 @@ public class UserController {
         this.userService = userService;
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
     public User create(@RequestBody User user) {
         return userService.create(user);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping
     public List<User> list() {
         return userService.findAll();
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/{id}")
     public Optional<User> get(@PathVariable Long id) {
         return userService.findById(id);
@@ -37,11 +41,13 @@ public class UserController {
         return userService.findByUsername(username);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PutMapping("/{id}")
     public User update(@PathVariable Long id, @RequestBody User user) {
         return userService.update(user);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         userService.delete(id);

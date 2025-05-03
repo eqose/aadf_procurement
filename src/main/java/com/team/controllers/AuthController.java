@@ -1,5 +1,6 @@
 package com.team.controllers;
 
+import com.team.models.Role;
 import com.team.models.User;
 import com.team.repository.UserRepository;
 import com.team.security.jwt.JwtUtils;
@@ -71,9 +72,13 @@ public class AuthController {
                     .badRequest()
                     .body(new MessageResponse("Error: Username is already taken!"));
         }
-        User user = new User(registerRequest.getUsername(),
-                encoder.encode(registerRequest.getPassword()),
-                com.team.models.Role.valueOf(registerRequest.getRole()));
+        User user = new User();
+        user.setUsername(registerRequest.getUsername());
+        user.setPassword(encoder.encode(registerRequest.getPassword()));
+        user.setEmail(registerRequest.getEmail());
+        user.setFirstName(registerRequest.getFirstName());
+        user.setLastName(registerRequest.getLastName());
+        user.setRole(Role.VENDORS);
         userRepository.save(user);
 
         return ResponseEntity.ok(user);

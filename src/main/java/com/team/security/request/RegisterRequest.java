@@ -1,5 +1,6 @@
 package com.team.security.request;
 
+import com.team.models.Role;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,7 +20,7 @@ public class RegisterRequest {
 
     private String lastName;
 
-    private String role;
+    private Role role;
 
     private String password;
 
