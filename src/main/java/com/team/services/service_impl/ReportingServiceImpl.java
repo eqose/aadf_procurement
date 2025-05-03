@@ -72,7 +72,7 @@ public class ReportingServiceImpl implements ReportingService {
 
             // Tender Info
             Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12);
-            doc.add(new Paragraph("Tender: " + tender.getTitle(), headerFont));
+            doc.add(new Paragraph("Tender: " + tender.getSubject(), headerFont));
             doc.add(new Paragraph("Description: " + tender.getDescription()));
             DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
             doc.add(new Paragraph("Deadline: " + tender.getDeadline().format(fmt)));

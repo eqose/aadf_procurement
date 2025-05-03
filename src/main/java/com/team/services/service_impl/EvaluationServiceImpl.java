@@ -45,7 +45,7 @@ public class EvaluationServiceImpl implements EvaluationService {
         // Notify vendor of scoring
         Notification note = new Notification();
         note.setRecipient(eval.getOffer().getVendor());
-        note.setMessage("Your offer was scored for Tender " + eval.getOffer().getTender().getTitle());
+        note.setMessage("Your offer was scored for Tender " + eval.getOffer().getTender().getSubject());
         note.setType("OFFER_SCORED");
         notification.notify(note);
         return saved;
