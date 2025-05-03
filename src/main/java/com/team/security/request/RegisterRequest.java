@@ -11,12 +11,8 @@ import javax.validation.constraints.Size;
 @Setter
 @NoArgsConstructor
 public class RegisterRequest {
-    @NotNull
-    @Size(min = 3, max = 20)
     private String username;
 
-    @NotNull
-    @Size(max = 30)
     private String email;
 
     private String firstName;
@@ -25,8 +21,6 @@ public class RegisterRequest {
 
     private String role;
 
-    @NotNull
-    @Size(max = 120)
     private String password;
 
 
