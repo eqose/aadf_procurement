@@ -83,7 +83,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
                 .antMatchers("/teamFinder/auth/**").permitAll()
-                .antMatchers("/teamFinder/**").permitAll()
+//                .antMatchers("/teamFinder/**").permitAll()
+                .antMatchers("/teamFinder/api/**").authenticated()
                 .anyRequest().permitAll();
 
         http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
